@@ -65,15 +65,6 @@ function buildBoard() {
     return board;
 }
 
-function createCell() {
-    return {
-        minesAroundCount: 0,
-        isShown: false,
-        isMine: false,
-        isMarked: false
-    }
-}
-
 function renderBoard(mat) {
     var strHTML = '<table border="1"><tbody>\n';
     for (var i = 0; i < mat.length; i++) {
@@ -135,8 +126,9 @@ function gameOver() {
 
 function cellMarked(elCell, i, j) {
     document.addEventListener('contextmenu', event => event.preventDefault());
-    if (gGame.isOn) return;
-    startGame()
+    if (!gGame.isOn) setTimer();
+    gGame.isOn = true;
+    var cell = gBoard[i][j];
 
     if (cell.isShown) return;
     if (!cell.isMarked) {
@@ -151,14 +143,9 @@ function cellMarked(elCell, i, j) {
     if (isWin() && !(gGame.markedCount > gLevel.mine)) gameOver();
 }
 
-function startGame() {
-    if (gGame.isOn) return;
-    gGame.isOn = true;
-    setTimer();
-}
-
 function cellClicked(elCell, i, j) {
-    startGame();
+    if (!gGame.isOn) setTimer();
+    gGame.isOn = true;
     var cell = gBoard[i][j];
     if (!gGame.isOn && cell.isMine) return; // need to finish - make sure 1st move isnt a mine
 
@@ -173,6 +160,15 @@ function cellClicked(elCell, i, j) {
     removeHide({ i, j });
 
     if (isWin()) gameOver();
+}
+
+function createCell() {
+    return {
+        minesAroundCount: 0,
+        isShown: false,
+        isMine: false,
+        isMarked: false
+    }
 }
 
 function getMineLocations() {
