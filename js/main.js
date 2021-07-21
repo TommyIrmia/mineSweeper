@@ -31,7 +31,7 @@ function initGame() {
     gBoard = buildBoard();
     renderBoard(gBoard);
     var elMineCounter = document.querySelector('.mines-counter span');
-    elMineCounter.innerText = ' : ' + gLevel.mine;
+    elMineCounter.innerText = gLevel.mine;
 }
 
 function chooseLevel(elBtn) {
@@ -46,7 +46,8 @@ function setLevel(size, mine) {
     changeSmiley('😬');
     resetCounters();
     initGame();
-    console.log(document.querySelectorAll('.mine'));
+    clearInterval(gameInter);
+    gGame.isOn = false;
 }
 
 function buildBoard() {
@@ -62,6 +63,15 @@ function buildBoard() {
         }
     }
     return board;
+}
+
+function createCell() {
+    return {
+        minesAroundCount: 0,
+        isShown: false,
+        isMine: false,
+        isMarked: false
+    }
 }
 
 function renderBoard(mat) {
@@ -113,10 +123,10 @@ function changeSmiley(smiley) {
 
 function gameOver() {
     if (isWin()) {
-        console.log('you win');
+        console.log('you win'); // make modal instead
         changeSmiley('😎')
     } else {
-        console.log('you lose');
+        console.log('you lose'); // make modal instead
         changeSmiley('😪');
     }
     clearInterval(gameInter);
@@ -125,9 +135,8 @@ function gameOver() {
 
 function cellMarked(elCell, i, j) {
     document.addEventListener('contextmenu', event => event.preventDefault());
-    if (!gGame.isOn) setTimer();
-    gGame.isOn = true;
-    var cell = gBoard[i][j];
+    if (gGame.isOn) return;
+    startGame()
 
     if (cell.isShown) return;
     if (!cell.isMarked) {
@@ -139,14 +148,19 @@ function cellMarked(elCell, i, j) {
         cell.isMarked = false;
         renderCell({ i, j }, `<div class="hide">${cell.minesAroundCount}</div>`);
     }
-    if (isWin()) gameOver();
+    if (isWin() && !(gGame.markedCount > gLevel.mine)) gameOver();
+}
+
+function startGame() {
+    if (gGame.isOn) return;
+    gGame.isOn = true;
+    setTimer();
 }
 
 function cellClicked(elCell, i, j) {
-    if (!gGame.isOn) setTimer();
+    startGame();
     var cell = gBoard[i][j];
     if (!gGame.isOn && cell.isMine) return; // need to finish - make sure 1st move isnt a mine
-    gGame.isOn = true;
 
     if (cell.isMarked || cell.isShown) return;
     if (cell.isMine) {
@@ -159,15 +173,6 @@ function cellClicked(elCell, i, j) {
     removeHide({ i, j });
 
     if (isWin()) gameOver();
-}
-
-function createCell() {
-    return {
-        minesAroundCount: 0,
-        isShown: false,
-        isMine: false,
-        isMarked: false
-    }
 }
 
 function getMineLocations() {
