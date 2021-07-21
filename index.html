@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
+    <title>Mine Sweeper</title>
+</head>
+
+<body onload="initGame()">
+    <div class="board">
+        <h1><img src="img/mine.png" />Mine Sweeper 2.0 <img src="img/mine.png" /></h1>
+        <div class="buttons">
+            <button class="easy" onclick="chooseLevel(this)">Easy</button>
+            <button class="medium" onclick="chooseLevel(this)">Medium</button>
+            <button class="expert" onclick="chooseLevel(this)">Expert</button>
+        </div>
+        <div class="timer"> Timer
+            <hr/> <span>  00:00:00 </span></div>
+        <div onclick="restartGame()" class="smiley">😬</div>
+        <div class="mines-counter">💣
+            <hr/> <span> 0 </span></div>
+
+
+        <div class="game-board"></div>
+
+
+        <script src="js/util.js"></script>
+        <script src="js/main.js"></script>
+
+        <div class="footer">Mine Sweeper 2.0 ©By Tommy Irmia</div>
+    </div>
+</body>
+
+</html>

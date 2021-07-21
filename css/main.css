@@ -1,0 +1,142 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: linear-gradient(black, white, black);
+    background-size: 200px 500px;
+}
+
+.board {
+    font-family: "Audiowide", sans-serif;
+    position: absolute;
+    left: 100px;
+    text-align: center;
+}
+
+h1 {
+    height: 150px;
+    width: 600px;
+    background-color: white;
+    border: inset 20px gray;
+    padding: 20px;
+    font-size: 40px;
+    margin-left: 30px;
+}
+
+h1 img {
+    width: 45px;
+}
+
+.buttons button {
+    font-family: "Audiowide", sans-serif;
+    font-size: 20px;
+    margin: 0px 50px;
+    width: 120px;
+    height: 40px;
+    border-radius: 30%;
+    transition: 2s;
+    display: inline-block;
+}
+
+.easy {
+    color: green
+}
+
+.medium {
+    color: orange;
+}
+
+.expert {
+    color: red;
+}
+
+.easy:hover {
+    background-color: green;
+    color: white;
+}
+
+.medium:hover {
+    background-color: orange;
+    color: white;
+}
+
+.expert:hover {
+    background-color: red;
+    color: white;
+}
+
+.timer {
+    display: inline-block;
+    width: 200px;
+    height: 90px;
+    background-color: darkgray;
+    padding: 10px 30px;
+    border: outset 5px white;
+    margin-top: 20px;
+}
+
+.smiley {
+    border: outset 5px white;
+    display: inline-block;
+    margin-left: 60px;
+    font-size: 40px;
+    height: 60px;
+    width: 70px;
+    background-color: darkgray;
+    border-radius: 10px;
+}
+
+.mines-counter {
+    display: inline-block;
+    width: 200px;
+    height: 90px;
+    background-color: darkgray;
+    padding: 10px 30px;
+    border: outset 5px white;
+    margin-left: 60px;
+}
+
+.game-board {
+    margin: auto;
+    margin-top: 30px;
+    width: 500px;
+    height: 500px;
+    background-color: lightgray;
+    border: 10px black double;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    height: 100%;
+    table-layout: fixed;
+}
+
+tr {
+    height: 8%;
+}
+
+td {
+    font-size: 120%;
+    border: 5px outset darkgray;
+}
+
+.cell {
+    background-color: rgb(153, 153, 153);
+    color: black;
+}
+
+.cell:hover {
+    background-color: rgb(58, 58, 58);
+}
+
+.hide {
+    display: none;
+}
+
+.footer {
+    margin-top: 20px;
+    border-top: 5px black solid;
+    padding: 10px;
+}
