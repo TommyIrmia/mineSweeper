@@ -214,11 +214,13 @@ function gameOver() {
         openModal('You Won!!');
         changeSmiley('😎')
         clearInterval(gameInter);
+        gGame.isOn = false;
     } else {
         openModal('You Lost');
         changeSmiley('😪');
         clearInterval(gameInter);
         revealMines();
+        gGame.isOn = false;
     }
 }
 
@@ -364,13 +366,11 @@ function openNegCells(cellI, cellJ, mat) {
 function closeNegCells() {
     for (var i = 0; i < gNegsLocations.length; i++) {
         var location = gNegsLocations[i];
-        console.log(location);
         var elCell = document.querySelector(`.cell${location.i}-${location.j}`);
         elCell.querySelector('div').classList.add('hide');
         elCell.style.backgroundColor = 'rgb(153, 153, 153)';
         var cell = gBoard[location.i][location.j];
         cell.isShown = false;
-        console.log('cell', cell, location.i, location.j);
     }
     gGame.isHint = false;
 }
