@@ -194,7 +194,12 @@ function changeSmiley(smiley) {
 function openModal(str) {
     var elModal = document.querySelector('.modal');
     elModal.style.display = 'block';
+    if (str.includes('flags')) {
+        elModal.style.fontSize = '20px';
+        setTimeout(closeModal, 2000);
+    }
     elModal.innerHTML = `${str}!<span> \n to play again press the cool SMILEY!</span>`
+
 }
 
 function closeModal() {
