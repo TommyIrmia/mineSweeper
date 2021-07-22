@@ -15,6 +15,7 @@ const FLAG = '🚩';
 var gameInter;
 var gBoard;
 var gLevel = {
+    name: 'easy',
     size: 4,
     mine: 2,
     safe: 1,
@@ -25,6 +26,7 @@ var gMineLocations;
 var gNegsLocations = [];
 var gGame = {
     isOn: false,
+    isWon: false,
     isFirstClick: false,
     isHint: false,
     shownCount: 0,
@@ -51,18 +53,6 @@ function renderSpecials(name, emoji) {
     elContainer.innerHTML = strHTML
 }
 
-
-function openModal() {
-    var elModal = document.querySelector('.modal');
-    elModal.style.display = 'block';
-    elModal.innerHTML = 'You Won!<span> \n to play again press the cool SMILEY!</span>'
-}
-
-function closeModal() {
-    var elModal = document.querySelector('.modal');
-    elModal.style.display = 'none';
-}
-
 function safeClick(elSafe) {
     gLevel.safe--;
     renderSpecials('safe', '🤞');
@@ -87,21 +77,28 @@ function hintClick(elHint) {
 }
 
 function chooseLevel(elBtn) {
-    if (elBtn.classList[0] === 'easy') setLevel(4, 2, 1);
-    if (elBtn.classList[0] === 'medium') setLevel(8, 12, 2);
-    if (elBtn.classList[0] === 'expert') setLevel(12, 30, 3);
+    if (elBtn.classList[0] === 'easy' ||
+        gLevel.name === 'easy') setLevel('easy', 4, 2, 1);
+    if (elBtn.classList[0] === 'medium' ||
+        gLevel.name === 'medium') setLevel('medium', 8, 12, 2);
+    if (elBtn.classList[0] === 'expert' ||
+        gLevel.name === 'expert') setLevel('expert', 12, 30, 3);
+    restartGame();
 }
 
-function setLevel(size, mine, specials) {
+function setLevel(name, size, mine, specials) {
+    gLevel.name = name;
     gLevel.size = size;
     gLevel.mine = mine;
     gLevel.life = specials;
     gLevel.safe = specials;
     gLevel.hint = specials;
-    restartGame();
 }
 
 function restartGame() {
+    if (gLevel.name === 'easy') setLevel('easy', 4, 2, 1)
+    if (gLevel.name === 'medium') setLevel('medium', 8, 12, 2)
+    if (gLevel.name === 'expert') setLevel('expert', 12, 30, 3)
     changeSmiley('😬');
     resetCounters();
     initGame();
@@ -174,10 +171,19 @@ function renderBoard(mat) {
 }
 
 function isWin() {
-    var totalCount = gGame.shownCount + gGame.markedCount;
-    console.log('shownCount', gGame.shownCount);
-    console.log('markedCount', gGame.markedCount);
-    return (totalCount === gLevel.size ** 2);
+    getTotalCount();
+    return (gGame.shownCount === gLevel.size ** 2);
+}
+
+function getTotalCount() {
+    var count = 0;
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard.length; j++) {
+            var currCell = gBoard[i][j];
+            if (currCell.isShown || currCell.isMarked) count++;
+        }
+    }
+    gGame.shownCount = count;
 }
 
 function changeSmiley(smiley) {
@@ -185,16 +191,26 @@ function changeSmiley(smiley) {
     elSmiley.innerText = smiley;
 }
 
+function openModal(str) {
+    var elModal = document.querySelector('.modal');
+    elModal.style.display = 'block';
+    elModal.innerHTML = `${str}!<span> \n to play again press the cool SMILEY!</span>`
+}
+
+function closeModal() {
+    var elModal = document.querySelector('.modal');
+    elModal.style.display = 'none';
+}
+
 function gameOver() {
     if (gGame.markedCount > gLevel.mine) {
-        console.log('Keep on trying!');
-        return;
-    } else if (isWin()) {
-        openModal(); // make modal instead
+        openModal('To many flags, keep going');
+    } else if (gGame.shownCount === gLevel.size ** 2) {
+        openModal('You Won!!');
         changeSmiley('😎')
         clearInterval(gameInter);
     } else {
-        console.log('you lose'); // make modal instead
+        openModal('You Lost');
         changeSmiley('😪');
         clearInterval(gameInter);
         revealMines();
@@ -242,7 +258,6 @@ function cellClicked(elCell, i, j) {
     if (cell.isMarked || cell.isShown) return;
     if (cell.isMine) {
         if (gGame.isHint) return;
-        console.log(gGame.isHint);
         --gLevel.life;
         renderSpecials('life', '💖');
         if (gLevel.life === 0) {
@@ -250,11 +265,11 @@ function cellClicked(elCell, i, j) {
             gGame.isOn = false;
         }
     } else if (cell.minesAroundCount === 0) {
-        openNegCells(i, j, gBoard);
+        // openNegCells(i, j, gBoard);
+        openCellsRecursive(i, j, gBoard);
     }
 
     cell.isShown = true;
-    gGame.shownCount++;
     removeHide({ i, j });
 
     if (isWin()) gameOver();
@@ -337,7 +352,6 @@ function openNegCells(cellI, cellJ, mat) {
                 removeHide({ i: cellI, j: cellJ })
             }
             if (!cell.isShown) {
-                gGame.shownCount++;
                 cell.isShown = true;
                 removeHide(cellLocation)
             }
@@ -353,10 +367,35 @@ function closeNegCells() {
         elCell.style.backgroundColor = 'rgb(153, 153, 153)';
         var cell = gBoard[location.i][location.j];
         cell.isShown = false;
-        gGame.shownCount--;
     }
-    gGame.shownCount++;
     gGame.isHint = false;
+}
+
+function openCellsRecursive(cellI, cellJ, mat) {
+
+    if (cellI < 0 || cellJ < 0 || cellI > mat.length - 1 || cellJ > mat[cellI].length - 1) return;
+    var cell = mat[cellI][cellJ]
+    if (cell.isShown) return;
+    if (cell.isMarked) return;
+    removeHide({ i: cellI, j: cellJ })
+
+    if (cell.minesAroundCount) {
+        return
+    }
+    var options = [
+        [cellI, cellJ + 1],
+        [cellI, cellJ - 1],
+        [cellI + 1, cellJ],
+        [cellI - 1, cellJ],
+        [cellI + 1, cellJ + 1],
+        [cellI - 1, cellJ - 1],
+        [cellI + 1, cellJ - 1],
+        [cellI - 1, cellJ + 1]
+    ]
+    for (var i = 0; i < options.length; i++) {
+        var option = options[i]
+        openCellsRecursive(option[0], option[1], mat)
+    }
 }
 
 function removeHide(location) {
