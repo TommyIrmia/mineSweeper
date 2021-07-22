@@ -147,6 +147,15 @@ h1 img {
     bottom: 215px;
     border-radius: 30px;
     font-family: "Audiowide", sans-serif;
+    font-size: 35px;
+    padding: 20px;
+    font-weight: bold;
+}
+
+.modal span {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 15px;
 }
 
 .game-board {

@@ -51,6 +51,18 @@ function renderSpecials(name, emoji) {
     elContainer.innerHTML = strHTML
 }
 
+
+function openModal() {
+    var elModal = document.querySelector('.modal');
+    elModal.style.display = 'block';
+    elModal.innerHTML = 'You Won!<span> \n to play again press the cool SMILEY!</span>'
+}
+
+function closeModal() {
+    var elModal = document.querySelector('.modal');
+    elModal.style.display = 'none';
+}
+
 function safeClick(elSafe) {
     gLevel.safe--;
     renderSpecials('safe', '🤞');
@@ -95,6 +107,7 @@ function restartGame() {
     initGame();
     clearInterval(gameInter);
     updateTimer('00:00:00');
+    closeModal();
 }
 
 function resetCounters() {
@@ -177,7 +190,7 @@ function gameOver() {
         console.log('Keep on trying!');
         return;
     } else if (isWin()) {
-        console.log('you win'); // make modal instead
+        openModal(); // make modal instead
         changeSmiley('😎')
         clearInterval(gameInter);
     } else {
