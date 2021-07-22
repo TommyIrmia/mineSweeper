@@ -15,11 +15,11 @@ body {
 }
 
 h1 {
-    height: 150px;
+    height: 120px;
     width: 600px;
     background-color: white;
     border: inset 20px gray;
-    padding: 20px;
+    padding: 10px;
     font-size: 40px;
     margin-left: 30px;
 }
@@ -31,7 +31,8 @@ h1 img {
 .buttons button {
     font-family: "Audiowide", sans-serif;
     font-size: 20px;
-    margin: 0px 50px;
+    margin-top: 0px;
+    margin-left: 40px;
     width: 120px;
     height: 40px;
     border-radius: 30%;
@@ -66,6 +67,10 @@ h1 img {
     color: white;
 }
 
+.divider {
+    margin-left: 30px;
+}
+
 .timer {
     display: inline-block;
     width: 200px;
@@ -74,6 +79,7 @@ h1 img {
     padding: 10px 30px;
     border: outset 5px white;
     margin-top: 20px;
+    margin-left: 30px;
 }
 
 .smiley {
@@ -97,9 +103,55 @@ h1 img {
     margin-left: 60px;
 }
 
+.life {
+    border: inset 5px white;
+    width: 130px;
+    height: 30px;
+    margin-top: 10px;
+    background-color: darkgray;
+    text-indent: 10px;
+    display: inline-block;
+}
+
+.hint {
+    border: inset 5px white;
+    display: inline-block;
+    width: 130px;
+    height: 30px;
+    margin-top: 10px;
+    margin-left: 30px;
+    background-color: darkgray;
+    text-indent: 10px;
+}
+
+.safe {
+    border: inset 5px white;
+    display: inline-block;
+    width: 130px;
+    height: 30px;
+    margin-top: 10px;
+    margin-left: 30px;
+    background-color: darkgray;
+    text-indent: 10px;
+}
+
+.modal {
+    height: 200px;
+    width: 200px;
+    position: absolute;
+    background-image: linear-gradient(to top, rgb(121, 202, 207), rgb(255, 255, 255), rgb(194, 226, 144));
+    border: rgb(39, 37, 37) inset 10px;
+    opacity: 0.7;
+    display: block;
+    right: 215px;
+    bottom: 215px;
+    border-radius: 30px;
+    font-family: "Audiowide", sans-serif;
+}
+
 .game-board {
     margin: auto;
-    margin-top: 30px;
+    margin-top: 10px;
     width: 500px;
     height: 500px;
     background-color: lightgray;
@@ -114,11 +166,11 @@ table {
 }
 
 tr {
-    height: 8%;
+    height: 7.5%;
 }
 
 td {
-    font-size: 120%;
+    font-size: 100%;
     border: 5px outset darkgray;
 }
 
