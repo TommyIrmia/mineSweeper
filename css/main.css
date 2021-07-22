@@ -142,7 +142,7 @@ h1 img {
     background-image: linear-gradient(to top, rgb(121, 202, 207), rgb(255, 255, 255), rgb(194, 226, 144));
     border: rgb(39, 37, 37) inset 10px;
     opacity: 0.7;
-    display: block;
+    display: none;
     right: 215px;
     bottom: 215px;
     border-radius: 30px;
