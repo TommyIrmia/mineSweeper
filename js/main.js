@@ -259,6 +259,7 @@ function cellClicked(elCell, i, j) {
         openNegCells(i, j, gBoard);
         renderSpecials('hint', '💡');
         setTimeout(closeNegCells, 1000);
+        return;
     }
     if (cell.isMarked || cell.isShown) return;
     if (cell.isMine) {
@@ -344,22 +345,18 @@ function renderCell(location, value) {
 function openNegCells(cellI, cellJ, mat) {
     gNegsLocations = [];
     var currLocation = { i: cellI, j: cellJ };
-    if (gGame.isHint) gNegsLocations.push(currLocation);
+    removeHide(currLocation);
+    gNegsLocations.push(currLocation);
     for (var i = cellI - 1; i <= cellI + 1; i++) {
         if (i < 0 || i >= mat.length) continue;
         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
             if (j < 0 || j >= mat[i].length) continue;
             if (i === cellI && j === cellJ) continue;
             var cell = gBoard[i][j];
+            if (cell.isShown) continue;
             var cellLocation = { i, j };
             gNegsLocations.push(cellLocation);
-            if (gGame.isHint && !cell.isShown) {
-                removeHide({ i: cellI, j: cellJ })
-            }
-            if (!cell.isShown) {
-                cell.isShown = true;
-                removeHide(cellLocation)
-            }
+            removeHide(cellLocation);
         }
     }
 }
@@ -367,11 +364,13 @@ function openNegCells(cellI, cellJ, mat) {
 function closeNegCells() {
     for (var i = 0; i < gNegsLocations.length; i++) {
         var location = gNegsLocations[i];
+        console.log(location);
         var elCell = document.querySelector(`.cell${location.i}-${location.j}`);
         elCell.querySelector('div').classList.add('hide');
         elCell.style.backgroundColor = 'rgb(153, 153, 153)';
         var cell = gBoard[location.i][location.j];
         cell.isShown = false;
+        console.log('cell', cell, location.i, location.j);
     }
     gGame.isHint = false;
 }
